@@ -9,6 +9,8 @@ import 'package:testingbloc_practice/dialogs/generic_dialog.dart';
 import 'package:testingbloc_practice/dialogs/loading_screen.dart';
 import 'package:testingbloc_practice/models.dart';
 import 'package:testingbloc_practice/strings.dart';
+import 'package:testingbloc_practice/views/iterable_list_view.dart';
+import 'package:testingbloc_practice/views/login_view.dart';
 
 void main() {
   runApp(
@@ -67,7 +69,23 @@ class HomePage extends StatelessWidget {
                   );
             }
           },
-          builder: (context, state) {},
+          builder: (context, state) {
+            final notes = state.fetchedNotes;
+            if (notes == null) {
+              return LoginView(
+                onLoginTapped: (email, password) {
+                  context.read<AppBloc>().add(
+                        LoginAction(
+                          email: email,
+                          password: password,
+                        ),
+                      );
+                },
+              );
+            } else {
+              return notes.toListView();
+            }
+          },
         ),
       ),
     );
